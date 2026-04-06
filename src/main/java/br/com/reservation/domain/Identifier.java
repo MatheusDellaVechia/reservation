@@ -1,6 +1,6 @@
 package br.com.reservation.domain;
 
-public interface Identifier {
+public interface Identifier extends ValueObject {
 
-    Long value();
+    String value();
 }
