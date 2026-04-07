@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "reserves")
 @Entity
 @NoArgsConstructor
-@Getter
+//@Getter
 public class ReserveEntity extends PanacheEntityBase {
 
     @Id
@@ -73,6 +73,9 @@ public class ReserveEntity extends PanacheEntityBase {
         this.purchaseDate = purchaseDate;
     }
 
+    public UUID getId() {
+        return id;
+    }
 
     public UUID getUserId() {
         return userId;
