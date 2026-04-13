@@ -1,7 +1,7 @@
 package br.com.reservation.domain.reserve;
 
 import br.com.reservation.domain.AggregateRoot;
-import br.com.reservation.domain.UserID;
+import br.com.reservation.domain.user.UserID;
 import br.com.reservation.domain.reserve.models.Status;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class Reserve extends AggregateRoot<ReserveID> {
             final Status status,
             final LocalDateTime purchaseDate
     ) {
-        super(reserveID, null);
+        super(reserveID);
         this.userID = userID;
         this.flightNumber = flightNumber;
         this.departureAirport = departureAirport;

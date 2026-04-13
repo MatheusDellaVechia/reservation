@@ -1,4 +1,6 @@
-package br.com.reservation.domain;
+package br.com.reservation.domain.user;
+
+import br.com.reservation.domain.ValueObject;
 
 public record UserID(String value) implements ValueObject {
 

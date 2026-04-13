@@ -1,25 +1,54 @@
 package br.com.reservation.infra.reserve;
 
-import br.com.reservation.domain.UserID;
+import br.com.reservation.domain.user.UserID;
 import br.com.reservation.domain.reserve.Reserve;
 import br.com.reservation.domain.reserve.ReserveGateway;
 import br.com.reservation.domain.reserve.ReserveID;
+import br.com.reservation.infra.reserve.messaging.ReserveCreatedEvent;
+import br.com.reservation.infra.reserve.messaging.ReserveEventPublisher;
 import br.com.reservation.infra.reserve.persistence.ReserveEntity;
 import br.com.reservation.infra.reserve.persistence.ReservePanacheRepository;
 import jakarta.inject.Singleton;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Singleton
 public record ReservePostgresGateway(
-        ReservePanacheRepository repository
+        ReservePanacheRepository repository,
+        ReserveEventPublisher eventPublisher
 ) implements ReserveGateway {
 
     @Override
     public Reserve save(Reserve reserve) {
         final var entity = this.from(reserve);
         this.repository.save(entity);
-        return this.toAggregate(entity);
+
+        final var savedReserve = this.toAggregate(entity);
+
+        // Publicar evento de reserva criada
+        this.publishReserveCreatedEvent(savedReserve);
+
+        return savedReserve;
+    }
+
+    private void publishReserveCreatedEvent(final Reserve reserve) {
+        final var event = new ReserveCreatedEvent(
+                reserve.getId().value(),
+                reserve.getUserID().value(),
+                reserve.getFlightNumber(),
+                reserve.getDepartureAirport(),
+                reserve.getArrivalAirport(),
+                reserve.getDepartureDate(),
+                reserve.getArrivalDate(),
+                reserve.getSeat(),
+                reserve.getReservation(),
+                reserve.getStatus().name(),
+                reserve.getPurchaseDate(),
+                LocalDateTime.now()
+        );
+
+        this.eventPublisher.publishReserveCreated(event);
     }
 
     private ReserveEntity from(final Reserve reserve) {

@@ -2,7 +2,7 @@ package br.com.reservation.application.reserve;
 
 import br.com.reservation.application.OutUseCase;
 import br.com.reservation.application.UseCase;
-import br.com.reservation.domain.UserID;
+import br.com.reservation.domain.user.UserID;
 import br.com.reservation.domain.reserve.Reserve;
 import br.com.reservation.domain.reserve.ReserveGateway;
 
